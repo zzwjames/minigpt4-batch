@@ -50,6 +50,11 @@ If you're installing MiniGPT-4 Batch for the first time, please follow these ste
    ```
    python app.py --image-folder path_to_image_folder --beam-search-numbers value
    ```
+## To-Do List
+
+- [ ] Make it work on Windows
+- [ ] Implement for MiniGPT-4 7B
+- [ ] Include inputs from Segment Anything
 
 ## Acknowledgment
 
