@@ -1,11 +1,12 @@
 import argparse
 import os
 import random
+import glob
 
 import numpy as np
 import torch
 import torch.backends.cudnn as cudnn
-import gradio as gr
+from PIL import Image
 
 from minigpt4.common.config import Config
 from minigpt4.common.dist_utils import get_rank
@@ -19,6 +20,7 @@ from minigpt4.processors import *
 from minigpt4.runners import *
 from minigpt4.tasks import *
 
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Demo")
     parser.add_argument("--cfg-path", type=str, default='eval_configs/minigpt4.yaml', help="path to configuration file.")
@@ -29,8 +31,10 @@ def parse_args():
         "in xxx=yyy format will be merged into config file (deprecate), "
         "change to --cfg-options instead.",
     )
-    args = parser.parse_args()
-    return args
+    parser.add_argument("--image-folder", type=str, required=True, help="path to the input image folder")
+    parser.add_argument("--beam-search-numbers", type=int, default=1, help="beam search numbers")
+    options = parser.parse_args()
+    return options
 
 
 def setup_seeds(config):
@@ -42,113 +46,55 @@ def setup_seeds(config):
 
     cudnn.benchmark = False
     cudnn.deterministic = True
-    
-# ========================================
-#             Model Initialization
-# ========================================
 
-SHARED_UI_WARNING = f'''### [NOTE] It is possible that you are waiting in a lengthy queue.
 
-You can duplicate and use it with a paid private GPU.
-
-<a class="duplicate-button" style="display:inline-block" target="_blank" href="https://huggingface.co/spaces/Vision-CAIR/minigpt4?duplicate=true"><img style="margin-top:0;margin-bottom:0" src="https://huggingface.co/datasets/huggingface/badges/raw/main/duplicate-this-space-xl-dark.svg" alt="Duplicate Space"></a>
-
-Alternatively, you can also use the demo on our [project page](https://minigpt-4.github.io).
-'''
-
-print('Initializing Chat')
-cfg = Config(parse_args())
-
-model_config = cfg.model_cfg
-model_cls = registry.get_model_class(model_config.arch)
-model = model_cls.from_config(model_config).to('cuda:0')
-
-vis_processor_cfg = cfg.datasets_cfg.cc_align.vis_processor.train
-vis_processor = registry.get_processor_class(vis_processor_cfg.name).from_config(vis_processor_cfg)
-chat = Chat(model, vis_processor)
-print('Initialization Finished')
-
-# ========================================
-#             Gradio Setting
-# ========================================
-
-def gradio_reset(chat_state, img_list):
-    if chat_state is not None:
-        chat_state.messages = []
-    if img_list is not None:
-        img_list = []
-    return None, gr.update(value=None, interactive=True), gr.update(placeholder='Please upload your image first', interactive=False), gr.update(value="Upload & Start Chat", interactive=True), chat_state, img_list
-
-def upload_img(gr_img, text_input, chat_state):
-    if gr_img is None:
-        return None, None, gr.update(interactive=True), chat_state, None
+def describe_image(image_path, chat, chat_state, img, num_beams=1, temperature=1.0):
     chat_state = CONV_VISION.copy()
     img_list = []
+
+    gr_img = Image.open(image_path)
     llm_message = chat.upload_img(gr_img, chat_state, img_list)
-    return gr.update(interactive=False), gr.update(interactive=True, placeholder='Type and press Enter'), gr.update(value="Start Chatting", interactive=False), chat_state, img_list
 
-def gradio_ask(user_message, chatbot, chat_state):
-    if len(user_message) == 0:
-        return gr.update(interactive=True, placeholder='Input should not be empty!'), chatbot, chat_state
-    chat.ask(user_message, chat_state)
-    chatbot = chatbot + [[user_message, None]]
-    return '', chatbot, chat_state
+    chat.ask("Describe this image.", chat_state)
+    generated_caption = chat.answer(conv=chat_state, img_list=img_list, max_new_tokens=300, num_beams=num_beams, temperature=temperature, max_length=2000)[0]
+
+    return generated_caption
 
 
-def gradio_answer(chatbot, chat_state, img_list, num_beams, temperature):
-    llm_message = chat.answer(conv=chat_state, img_list=img_list, max_new_tokens=300, num_beams=1, temperature=temperature, max_length=2000)[0]
-    chatbot[-1][1] = llm_message
-    return chatbot, chat_state, img_list
+if __name__ == '__main__':
+    args = parse_args()
 
-title = """<h1 align="center">Demo of MiniGPT-4</h1>"""
-description = """<h3>This is the demo of MiniGPT-4. Upload your images and start chatting!</h3>"""
-article = """<p><a href='https://minigpt-4.github.io'><img src='https://img.shields.io/badge/Project-Page-Green'></a></p><p><a href='https://github.com/Vision-CAIR/MiniGPT-4'><img src='https://img.shields.io/badge/Github-Code-blue'></a></p><p><a href='https://github.com/TsuTikgiau/blip2-llm/blob/release_prepare/MiniGPT_4.pdf'><img src='https://img.shields.io/badge/Paper-PDF-red'></a></p>
-"""
+    cfg = Config(args)
 
-#TODO show examples below
+    model_config = cfg.model_cfg
+    model_cls = registry.get_model_class(model_config.arch)
+    model = model_cls.from_config(model_config).to('cuda:0')
 
-with gr.Blocks() as demo:
-    gr.Markdown(title)
-    gr.Markdown(SHARED_UI_WARNING)
-    gr.Markdown(description)
-    gr.Markdown(article)
+    vis_processor_cfg = cfg.datasets_cfg.cc_align.vis_processor.train
+    vis_processor = registry.get_processor_class(vis_processor_cfg.name).from_config(vis_processor_cfg)
+    chat = Chat(model, vis_processor)
 
-    with gr.Row():
-        with gr.Column(scale=0.5):
-            image = gr.Image(type="pil")
-            upload_button = gr.Button(value="Upload & Start Chat", interactive=True, variant="primary")
-            clear = gr.Button("Restart")
-            
-            num_beams = gr.Slider(
-                minimum=1,
-                maximum=5,
-                value=1,
-                step=1,
-                interactive=True,
-                label="beam search numbers)",
-            )
-            
-            temperature = gr.Slider(
-                minimum=0.1,
-                maximum=2.0,
-                value=1.0,
-                step=0.1,
-                interactive=True,
-                label="Temperature",
-            )
-            
+    chat_state = CONV_VISION.copy()
+    img_list = []
 
-        with gr.Column():
-            chat_state = gr.State()
-            img_list = gr.State()
-            chatbot = gr.Chatbot(label='MiniGPT-4')
-            text_input = gr.Textbox(label='User', placeholder='Please upload your image first', interactive=False)
+    image_folder = args.image_folder
+    num_beams = args.beam_search_numbers
+    temperature = 1.0  # default temperature
+
+    image_extensions = ['jpg', 'jpeg', 'png', 'bmp']
+    image_paths = []
+
+    for ext in image_extensions:
+        image_paths.extend(glob.glob(os.path.join(image_folder, f'*.{ext}')))
+        image_paths.extend(glob.glob(os.path.join(image_folder, f'*.{ext.upper()}')))
     
-    upload_button.click(upload_img, [image, text_input, chat_state], [image, text_input, upload_button, chat_state, img_list])
-    
-    text_input.submit(gradio_ask, [text_input, chatbot, chat_state], [text_input, chatbot, chat_state]).then(
-        gradio_answer, [chatbot, chat_state, img_list, num_beams, temperature], [chatbot, chat_state, img_list]
-    )
-    clear.click(gradio_reset, [chat_state, img_list], [chatbot, image, text_input, upload_button, chat_state, img_list], queue=False)
+    if not os.path.exists("mycaptions"):
+        os.makedirs("mycaptions")
 
-demo.launch(enable_queue=True)
+    for image_path in image_paths:
+        caption = describe_image(image_path, chat, chat_state, img_list, num_beams, temperature)
+
+        with open("mycaptions/{}_caption.txt".format(os.path.splitext(os.path.basename(image_path))[0]), "w") as f:
+            f.write(caption)
+        
+        print(f"Caption for {os.path.basename(image_path)} saved in 'mycaptions' folder")

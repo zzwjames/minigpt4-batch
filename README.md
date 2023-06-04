@@ -10,4 +10,49 @@ pinned: false
 license: other
 ---
 
+Welcome to the MiniGPT-4 Batch repo! This repository provides an implementation of MiniGPT-4 to mass caption Stable Diffusion images. It utilizes llama weights that are downloaded automatically if not already present. Please note that this implementation currently works only on Linux systems.
+
+## Getting Started
+
+If you're installing MiniGPT-4 Batch for the first time, please follow these steps:
+
+1. Clone the GitHub repository:
+
+   ```git
+   git clone -b dev https://github.com/pipinstallyp/minigpt4-batch
+   ```
+
+2. Download the necessary files:
+
+   ```
+   wget https://huggingface.co/ckpt/minigpt4/resolve/main/minigpt4.pth -O /content/minigpt4/checkpoint.pth
+   wget https://huggingface.co/ckpt/minigpt4/resolve/main/blip2_pretrained_flant5xxl.pth -O /content/minigpt4/blip2_pretrained_flant5xxl.pth
+   ```
+
+3. Install the required packages:
+
+   ```
+   pip install -q salesforce-lavis
+   pip install -q bitsandbytes
+   pip install -q accelerate
+   pip install -q gradio==3.27.0
+   pip install -q git+https://github.com/huggingface/transformers.git -U
+   ```
+
+4. Change to the project directory:
+
+   ```
+   %cd /minigpt4
+   ```
+
+5. Now, you can run the script:
+
+   ```
+   python app.py --image-folder path_to_image_folder --beam-search-numbers value
+   ```
+
+## Acknowledgment
+
+A huge thank you to [Camenduru](https://github.com/camenduru) for developing the awesome MiniGPT-4 Colab, which has served as the foundation for most of this work. This project is primarily aimed at helping people train Stable Diffusion models to mass caption their images.
+
 Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
