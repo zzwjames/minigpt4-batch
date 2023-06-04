@@ -25,9 +25,11 @@ If you're installing MiniGPT-4 Batch for the first time, please follow these ste
 2. Download the necessary files:
 
    ```
-   wget https://huggingface.co/ckpt/minigpt4/resolve/main/minigpt4.pth -O /content/minigpt4/checkpoint.pth
-   wget https://huggingface.co/ckpt/minigpt4/resolve/main/blip2_pretrained_flant5xxl.pth -O /content/minigpt4/blip2_pretrained_flant5xxl.pth
+   wget https://huggingface.co/ckpt/minigpt4/resolve/main/minigpt4.pth -O ./minigpt4/checkpoint.pth
+   wget https://huggingface.co/ckpt/minigpt4/resolve/main/blip2_pretrained_flant5xxl.pth -O ./minigpt4/blip2_pretrained_flant5xxl.pth
    ```
+
+To get this right you'd need to replace ./minigpt4/checkpoint.pth with directory your minigpt4 directory + checkpoint.pth, for example. 
 
 3. Install the required packages:
 
