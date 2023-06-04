@@ -29,8 +29,8 @@ Change directory to minigp4-batch
 2. Download the necessary files:
 
    ```
-   wget https://huggingface.co/ckpt/minigpt4/resolve/main/minigpt4.pth -O ./minigpt4-batch/checkpoint.pth
-   wget https://huggingface.co/ckpt/minigpt4/resolve/main/blip2_pretrained_flant5xxl.pth -O ./minigpt4-batch/blip2_pretrained_flant5xxl.pth
+   wget https://huggingface.co/ckpt/minigpt4/resolve/main/minigpt4.pth -O ./checkpoint.pth
+   wget https://huggingface.co/ckpt/minigpt4/resolve/main/blip2_pretrained_flant5xxl.pth -O ./blip2_pretrained_flant5xxl.pth
    ```
 
 To get this right you'd need to replace ./minigpt4/checkpoint.pth with directory your minigpt4 directory + checkpoint.pth, for example. 
