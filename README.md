@@ -21,7 +21,11 @@ If you're installing MiniGPT-4 Batch for the first time, please follow these ste
    ```git
    git clone https://github.com/pipinstallyp/minigpt4-batch
    ```
+Change directory to minigp4-batch
 
+  ```
+   cd minigpt4-batch
+   ```
 2. Download the necessary files:
 
    ```
