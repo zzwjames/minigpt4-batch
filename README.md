@@ -38,6 +38,8 @@ To get this right you'd need to replace ./minigpt4/checkpoint.pth with directory
 3. Install the required packages:
 
    ```
+   pip install cmake
+   pip install lit
    pip install -q salesforce-lavis
    pip install -q bitsandbytes
    pip install -q accelerate
