@@ -43,7 +43,6 @@ To get this right you'd need to replace ./minigpt4/checkpoint.pth with directory
    pip install -q salesforce-lavis
    pip install -q bitsandbytes
    pip install -q accelerate
-   pip install -q gradio==3.27.0
    pip install -q git+https://github.com/huggingface/transformers.git -U
    ```
 
