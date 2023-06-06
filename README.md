@@ -52,6 +52,21 @@ To get this right you'd need to replace ./minigpt4/checkpoint.pth with directory
    ```
    python app.py --image-folder path_to_image_folder --beam-search-numbers value
    ```
+   
+   If you want to test llama 7b then use this:
+   
+   ```
+   python app.py --image-folder path_to_image_folder --beam-search-numbers 2 --model llama7b
+   ```
+   
+In your repository directory you can make two folders namely
+```
+images  
+mycaptions
+```
+
+in this case your path_to_image_folder = images
+
 ## To-Do List
 
 - [ ] Make it work on Windows
