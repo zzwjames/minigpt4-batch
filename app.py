@@ -33,6 +33,7 @@ def parse_args():
     )
     parser.add_argument("--image-folder", type=str, required=True, help="path to the input image folder")
     parser.add_argument("--beam-search-numbers", type=int, default=1, help="beam search numbers")
+    parser.add_argument("--model", type=str, default='llama', help="Model to be used for generation. Options: 'llama' (default), 'llama7b'")
     options = parser.parse_args()
     return options
 
@@ -67,6 +68,9 @@ if __name__ == '__main__':
     cfg = Config(args)
 
     model_config = cfg.model_cfg
+    if args.model == "llama7b":
+        model_config.llama_model = "camenduru/MiniGPT4-7B"
+        
     model_cls = registry.get_model_class(model_config.arch)
     model = model_cls.from_config(model_config).to('cuda:0')
 
