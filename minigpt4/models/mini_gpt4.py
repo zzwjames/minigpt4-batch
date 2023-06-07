@@ -38,7 +38,7 @@ class MiniGPT4(Blip2Base):
         freeze_vit=True,
         freeze_qformer=True,
         num_query_token=32,
-        llama_model="camenduru/MiniGPT4",
+        llama_model="",
         llama_cache_dir='',
         prompt_path="",
         prompt_template="",
@@ -87,16 +87,16 @@ class MiniGPT4(Blip2Base):
         print('Loading Q-Former Done')
 
         print('Loading LLAMA')
-        self.llama_tokenizer = LlamaTokenizer.from_pretrained('camenduru/MiniGPT4', use_fast=False)
+        self.llama_tokenizer = LlamaTokenizer.from_pretrained('camenduru/MiniGPT4-7B', use_fast=False)
         self.llama_tokenizer.pad_token = self.llama_tokenizer.eos_token
 
         if llama_cache_dir:
             self.llama_model = LlamaForCausalLM.from_pretrained(
-                llama_model, load_in_8bit=True, torch_dtype=torch.float16, device_map="auto"
+                'camenduru/MiniGPT4-7B', load_in_8bit=True, torch_dtype=torch.float16, device_map="auto"
             )
         else:
             self.llama_model = LlamaForCausalLM.from_pretrained(
-                llama_model, load_in_8bit=True, torch_dtype=torch.float16, device_map="auto"
+                'camenduru/MiniGPT4-7B', load_in_8bit=True, torch_dtype=torch.float16, device_map="auto"
             )
         for name, param in self.llama_model.named_parameters():
             param.requires_grad = False
@@ -192,7 +192,6 @@ class MiniGPT4(Blip2Base):
             torch.ones([atts_img.shape[0], atts_img.shape[1]+1],
                        dtype=torch.long).to(image.device).fill_(-100)  # plus one for bos
         )
-
         targets = torch.cat([empty_targets, targets], dim=1)
 
         batch_size = img_embeds.shape[0]
