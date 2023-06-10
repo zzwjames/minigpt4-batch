@@ -1,6 +1,38 @@
 Welcome to the MiniGPT-4 Batch repo! This repository provides an implementation of MiniGPT-4 to mass caption Stable Diffusion images. It utilizes llama weights that are downloaded automatically if not already present. Please note that this implementation currently works only on Linux systems and runs only on high end machines (not the free colab).
 
-## Getting Started
+## Windows Installation Instructions
+
+To install and run MiniGPT-4 Batch on Windows, please follow these steps:
+
+1. Run the `Setup.bat` script:
+
+   ```
+   Setup.bat
+   ```
+
+2. Check your `/images` and `/mycaptions` folders. In the `/images` folder, one sample image is provided; feel free to delete it.
+
+3. If you're just testing it out, simply execute the `run.bat` script.
+
+   **OR**
+
+3. If you want to run the script manually, you need to:
+
+   a. Activate the virtual environment:
+
+   ```
+   .\venv\Scripts\activate.bat
+   ```
+
+   b. Run the `app.py` script with the desired options:
+
+   ```
+   python app.py --image-folder ./images --beam-search-numbers 2
+   ```
+
+Now you're all set to use MiniGPT-4 Batch on Windows!
+
+## Getting Started (LINUX)
 
 If you're installing MiniGPT-4 Batch for the first time, please follow these steps:
 
@@ -68,6 +100,6 @@ in this case your path_to_image_folder = images
 
 ## Acknowledgment
 
-A huge thank you to [Camenduru](https://github.com/camenduru) for developing the awesome MiniGPT-4 Colab, which has served as the foundation for most of this work. This project is primarily aimed at helping people train Stable Diffusion models to mass caption their images.
+A huge thank you to [Camenduru](https://github.com/camenduru) for developing the awesome MiniGPT-4 Colab, which has served as the foundation for most of this work. Huge thanks to [rafraf](https://www.instagram.com/rafstahelin/) for making the features what they are. This project is primarily aimed at helping people train Stable Diffusion models to mass caption their images.
 
 Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
