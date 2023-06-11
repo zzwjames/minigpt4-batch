@@ -2,6 +2,7 @@ import argparse
 import os
 import random
 import glob
+import time
 
 import numpy as np
 import torch
@@ -96,9 +97,13 @@ if __name__ == '__main__':
         os.makedirs("mycaptions")
 
     for image_path in image_paths:
+        start_time = time.time()
         caption = describe_image(image_path, chat, chat_state, img_list, num_beams, temperature)
 
         with open("mycaptions/{}_caption.txt".format(os.path.splitext(os.path.basename(image_path))[0]), "w") as f:
             f.write(caption)
         
+        end_time = time.time()
+        time_taken = end_time - start_time
         print(f"Caption for {os.path.basename(image_path)} saved in 'mycaptions' folder")
+        print(f"Time taken to process caption for {os.path.basename(image_path)} is: {time_taken:.2f} s")
