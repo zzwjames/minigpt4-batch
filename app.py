@@ -35,6 +35,7 @@ def parse_args():
     parser.add_argument("--image-folder", type=str, required=True, help="path to the input image folder")
     parser.add_argument("--beam-search-numbers", type=int, default=1, help="beam search numbers")
     parser.add_argument("--model", type=str, default='llama', help="Model to be used for generation. Options: 'llama' (default), 'llama7b'")
+    parser.add_argument("--save-in-imgfolder", action="store_true", help="save captions in the input image folder")
     options = parser.parse_args()
     return options
 
@@ -93,17 +94,23 @@ if __name__ == '__main__':
         image_paths.extend(glob.glob(os.path.join(image_folder, f'*.{ext}')))
         image_paths.extend(glob.glob(os.path.join(image_folder, f'*.{ext.upper()}')))
     
-    if not os.path.exists("mycaptions"):
-        os.makedirs("mycaptions")
+    if not args.save_in_imgfolder:
+        if not os.path.exists("mycaptions"):
+            os.makedirs("mycaptions")
 
     for image_path in image_paths:
         start_time = time.time()
         caption = describe_image(image_path, chat, chat_state, img_list, num_beams, temperature)
 
-        with open("mycaptions/{}_caption.txt".format(os.path.splitext(os.path.basename(image_path))[0]), "w") as f:
+        if args.save_in_imgfolder:
+            output_path = os.path.join(image_folder, "{}_caption.txt".format(os.path.splitext(os.path.basename(image_path))[0]))
+        else:
+            output_path = "mycaptions/{}_caption.txt".format(os.path.splitext(os.path.basename(image_path))[0])
+
+        with open(output_path, "w") as f:
             f.write(caption)
         
         end_time = time.time()
         time_taken = end_time - start_time
-        print(f"Caption for {os.path.basename(image_path)} saved in 'mycaptions' folder")
+        print(f"Caption for {os.path.basename(image_path)} saved in '{output_path}'")
         print(f"Time taken to process caption for {os.path.basename(image_path)} is: {time_taken:.2f} s")
