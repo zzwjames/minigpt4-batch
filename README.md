@@ -91,12 +91,17 @@ mycaptions
 ```
 
 in this case your path_to_image_folder = images
+## Features
+1. Shows timestamp to process each caption
+2. Use --save-in-imgfolder to save captions in your images folder instead.
+3. One click setup (setup.bat) for windows.
 
 ## To-Do List
 
-- [ ] Make it work on Windows
+- [x] ~~Make it work on Windows~~
 - [ ] Implement for MiniGPT-4 7B
 - [ ] Include inputs from Segment Anything
+
 
 ## Acknowledgment
 
