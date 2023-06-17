@@ -101,6 +101,7 @@ in this case your path_to_image_folder = images
 - [x] ~~Make it work on Windows~~
 - [ ] Implement for MiniGPT-4 7B
 - [ ] Include inputs from Segment Anything
+- [ ] DOCKER SUPPORT COMING TO YAYYYY
 
 
 ## Acknowledgment
