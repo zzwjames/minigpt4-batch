@@ -29,8 +29,10 @@ pip3 install -e .
 cd ..
 
 echo Downloading pretrained models...
-curl -L -o ./checkpoint.pth https://huggingface.co/ckpt/minigpt4/resolve/main/minigpt4.pth
+curl -L -o ./checkpoint.pth https://huggingface.co/ckpt/minigpt4/resolve/main/prerained_minigpt4_7b.pth.pth
 curl -L -o ./blip2_pretrained_flant5xxl.pth https://huggingface.co/ckpt/minigpt4/resolve/main/blip2_pretrained_flant5xxl.pth
+curl -L -o ./models.zip https://huggingface.co/pipyp/minigpt4py/blob/main/models.zip
+unzip ./models.zip
 
 echo Installing cmake, lit, salesforce-lavis, accelerate, and transformers...
 pip install cmake
@@ -38,5 +40,23 @@ pip install lit
 pip install -q salesforce-lavis
 pip install -q accelerate
 pip install -q git+https://github.com/huggingface/transformers.git -U
+
+:: Adding the extra required libraries...
+echo Installing argparse, csv, os, random, glob, time, numpy, Pillow, cv2, tqdm, tensorflow, huggingface-hub, pathlib, copy, and keras...
+pip install argparse
+pip install csv
+pip install os
+pip install random
+pip install glob
+pip install time
+pip install numpy
+pip install Pillow
+pip install opencv-python-headless
+pip install tqdm
+pip install tensorflow
+pip install huggingface-hub
+pip install pathlib
+pip install copy
+pip install keras
 
 echo Setup complete within virtual environment!
