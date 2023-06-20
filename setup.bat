@@ -29,7 +29,7 @@ pip3 install -e .
 cd ..
 
 echo Downloading pretrained models...
-curl -L -o ./checkpoint.pth https://huggingface.co/ckpt/minigpt4/resolve/main/prerained_minigpt4.pth
+curl -L -o ./checkpoint.pth https://huggingface.co/ckpt/minigpt4-7B/resolve/main/prerained_minigpt4_7b.pth
 curl -L -o ./blip2_pretrained_flant5xxl.pth https://huggingface.co/ckpt/minigpt4/resolve/main/blip2_pretrained_flant5xxl.pth
 curl -L -o ./models.zip https://huggingface.co/pipyp/minigpt4py/resolve/main/models.zip
 python extract.py
