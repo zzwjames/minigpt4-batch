@@ -29,10 +29,10 @@ pip3 install -e .
 cd ..
 
 echo Downloading pretrained models...
-curl -L -o ./checkpoint.pth https://huggingface.co/ckpt/minigpt4/resolve/main/prerained_minigpt4_7b.pth.pth
+curl -L -o ./checkpoint.pth https://huggingface.co/ckpt/minigpt4/resolve/main/prerained_minigpt4.pth
 curl -L -o ./blip2_pretrained_flant5xxl.pth https://huggingface.co/ckpt/minigpt4/resolve/main/blip2_pretrained_flant5xxl.pth
-curl -L -o ./models.zip https://huggingface.co/pipyp/minigpt4py/blob/main/models.zip
-unzip ./models.zip
+curl -L -o ./models.zip https://huggingface.co/pipyp/minigpt4py/resolve/main/models.zip
+python extract.py
 
 echo Installing cmake, lit, salesforce-lavis, accelerate, and transformers...
 pip install cmake
