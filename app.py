@@ -87,7 +87,7 @@ if __name__ == '__main__':
     num_beams = args.beam_search_numbers
     temperature = 1.0  # default temperature
 
-    image_extensions = ['jpg', 'jpeg', 'png', 'bmp']
+    image_extensions = ['jpg', 'jpeg', 'png', 'bmp', "webp"]
     image_paths = []
 
     for ext in image_extensions:
