@@ -30,6 +30,12 @@ To install and run MiniGPT-4 Batch on Windows, please follow these steps:
    python app.py --image-folder ./images --beam-search-numbers 2
    ```
 
+   NEW: We're testing to combine WD tags with minigpt4-batch. If you want to include WD tags along with minigpt4 captions, consider running backup_app.py. In `backup_app.py` WD tagging is mandatory, working to make that optional!
+
+   ```
+   python backup_app.py --image-folder ./images --beam-search-numbers 2 --model-dir models/wd14_tagger --undesired-tags '1girl,1boy,solo'
+   ```
+
 Now you're all set to use MiniGPT-4 Batch on Windows!
 
 ## Getting Started (LINUX)
