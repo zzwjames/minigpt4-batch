@@ -115,3 +115,5 @@ in this case your path_to_image_folder = images
 A huge thank you to [Camenduru](https://github.com/camenduru) for developing the awesome MiniGPT-4 Colab, which has served as the foundation for most of this work. Huge thanks to [rafraf](https://www.instagram.com/rafstahelin/) for making the features what they are. This project is primarily aimed at helping people train Stable Diffusion models to mass caption their images.
 
 Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
+
+Check out https://github.com/gessyoo/minigpt4-batch-tweaked fork with implemented changes which removes trivial words like - "The image shows" and "The image is," etc. and the _caption extension from the text captions.
