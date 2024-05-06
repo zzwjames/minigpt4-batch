@@ -1,7 +1,5 @@
 ## Getting Started (LINUX)
 
-If you're installing MiniGPT-4 Batch for the first time, please follow these steps:
-
 1. Clone the GitHub repository:
 
    ```git
@@ -25,8 +23,6 @@ Change directory to minigp4-batch
    wget https://huggingface.co/ckpt/minigpt4/resolve/main/blip2_pretrained_flant5xxl.pth -O ./blip2_pretrained_flant5xxl.pth
    ```
 
-To get this right you'd need to replace ./minigpt4/checkpoint.pth with directory your minigpt4 directory + checkpoint.pth, for example. 
-
 3. Install the required packages:
 
    ```
@@ -38,9 +34,10 @@ To get this right you'd need to replace ./minigpt4/checkpoint.pth with directory
    pip install -q git+https://github.com/huggingface/transformers.git -U
    ```
 
-5. Now, you can run the script:
+5. Run the script:
 
    ```
+   export CUDA_VISIBLE_DEVICES=0
    python app.py --image-folder path_to_image_folder --beam-search-numbers value
    ```
    
@@ -62,18 +59,4 @@ in this case your path_to_image_folder = images
 2. Use --save-in-imgfolder to save captions in your images folder instead.
 3. One click setup (setup.bat) for windows.
 
-## To-Do List
 
-- [x] ~~Make it work on Windows~~
-- [ ] Implement for MiniGPT-4 7B
-- [ ] Include inputs from Segment Anything
-- [ ] DOCKER SUPPORT COMING TO YAYYYY
-
-
-## Acknowledgment
-
-A huge thank you to [Camenduru](https://github.com/camenduru) for developing the awesome MiniGPT-4 Colab, which has served as the foundation for most of this work. Huge thanks to [rafraf](https://www.instagram.com/rafstahelin/) for making the features what they are. This project is primarily aimed at helping people train Stable Diffusion models to mass caption their images.
-
-Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
-
-Check out https://github.com/gessyoo/minigpt4-batch-tweaked fork with implemented changes which removes trivial words like - "The image shows" and "The image is," etc. and the _caption extension from the text captions.
